@@ -120,7 +120,7 @@ function changeRock() {
 }
 function draw() {
   //150 = dead
-  ctx.clearRect(0, 0, cnv.width, cnv.height);
+  ctx.clearRect(0, 0, cnv.width, cnv.height);   
   ctx.drawImage(
     playerImg,
     player.frameE,
@@ -185,7 +185,7 @@ function updatePosition() {
     }
   }
 
-  if (banana.pontos < 75) {
+  if (banana.pontos < 80) {
     setTimeout(() => {
       if (banana.pontos > 0) {
         crocoBoss.style.visibility = "visible";
@@ -241,7 +241,11 @@ function estadoPersonagem() {
         frameA = 0;
       }, 600);
       console.log(banana.pontos);
-    } 
+    } else {
+      clearInterval(intervalo);
+      player.frameE = 80;
+      frameA = 160;
+    }
   }, 800);
   setInterval(() => {
     if (morto == false) {

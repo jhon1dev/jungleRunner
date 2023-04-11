@@ -22,13 +22,13 @@ export class Banana{
         
     }
     
-    colide(posiçãoX, posiçãoY, tamanho, poits){
-       //console.log("Posx " + posiçãoX + "Posy " + posiçãoY + "Tamanho " + tamanho + "poits " + poits)
+    colide(posiçãoX, posiçãoY, tamanho, points){
+       //console.log("Posx " + posiçãoX + "Posy " + posiçãoY + "Tamanho " + tamanho + "points " + points)
        //console.log("PosX: "+ this.posX + "posY: " + this.posY)
        if (posiçãoX == this.index && posiçãoY > this.posY && posiçãoY < this.posY + 40){
             
             if (this.pontos > 0){
-                this.pontos += 10; 
+                this.pontos += 15; 
                 this.posY = -100000;
                 setTimeout(() => {
                     this.posY = -100;
@@ -41,7 +41,7 @@ export class Banana{
                 this.pontos = 150;
                 
             }
-            console.log(poits)
+            console.log(points)
         } else {
         }
     }
