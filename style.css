@@ -1,0 +1,193 @@
+img{
+    position: absolute; 
+    display: none;
+}
+body{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #216310;
+} 
+canvas{
+    overflow: hidden;
+}
+#jungle{
+    display: block;
+    top: 120px;
+}
+#junglerSuit{
+    display: block;
+    top: 530px;
+    z-index: 10;
+    left: 20px;
+    z-index: 8;
+}
+#junglerSuit:hover{
+    cursor: pointer;
+}
+#adventureSuit{
+    display: block;
+    top: 530px;
+    right: 20px;
+    z-index: 8;
+}
+#adventureSuit:hover{
+    cursor: pointer; 
+}
+#armySuit{
+    display: block;
+    top: 720px;
+    left: 20px;
+    z-index: 8;
+}
+#armySuit:hover{
+    cursor: pointer; 
+}
+#runner{
+    display: block;
+    top: 170px;
+}
+#botão, #play{
+    display: block;
+    z-index: 8;
+}
+.button{
+    top: 285px;
+}
+.play{
+    top: 365px;
+}
+#energy{
+    display: none;
+    left: 50px;
+    position: absolute;
+    background-color: #ffbd00;
+    color: rgb(190, 31, 31); 
+    top: 13px;
+    border-radius: 40px;;
+    
+    height: 20px; 
+    width: 150px;
+    z-index: 9;
+}
+#energyLess{
+    display: none;
+    left: 51px;
+    position: absolute;
+    background-color: rgb(41, 23, 23);
+    top: 13px;
+    border-radius: 30px; 
+    height: 20px; 
+    width: 150px;
+    z-index: 8;
+}
+
+#energy{
+    left: 50px;
+    top: 10px;
+    height: 25px;
+    z-index: 10;
+    width: 150px;
+}
+#crocoBoss{
+    top: 1000px;
+    transition: 0.75s all linear;
+}
+#scoreGlobal{
+    font-family: Helvetica;
+    font-weight: 900;
+    position: absolute;
+    z-index: 30;
+    top: 62px;
+    left: 0;
+    font-size: 15px;
+    display: none; 
+}
+#scoreAtual{
+    font-family: Helvetica;
+    font-weight: 900;
+    position: absolute;
+    color: white;
+    z-index: 30;
+    left: 3px;
+    top: 60px;
+    font-size: 15px;
+    display: none;
+}
+#maxScoreGlobal{
+    font-family: Helvetica;
+    font-weight: 900;
+    position: absolute;
+    z-index: 30;
+    top: 42px;
+    left: 0;
+    font-size: 15px;
+    display: none; 
+}
+#maxScoreAtual{
+    font-family: Helvetica;
+    font-weight: 900;
+    position: absolute;
+    color: white;
+    z-index: 30;
+    left: 3px;
+    top: 40px;
+    font-size: 15px;
+    display: none;
+}
+#gameOver{
+    top: 30%;
+    opacity: 0;
+    z-index: 10;
+}
+#grass{
+    position: absolute; 
+    width: 100%;
+    z-index: -2;
+    animation: slidein2 2s linear infinite;
+}
+#grassForeground{
+    z-index: 7;
+    display: block;
+}
+#side1, #side2, #side3{
+    position: absolute;
+    top: -400px;
+    animation: slidein 1.5s linear infinite;
+    z-index: -1;
+}
+#icon{
+    left: 0;
+    top: 2px;
+    z-index: 11;
+}
+#side1{
+    left: 0%;
+}
+#side3{
+    left: 70%
+}
+.contain{
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+@keyframes slidein {
+    from {
+      top: -700px;  
+    }
+  
+    to {
+      top: -11px;
+    }
+  }
+  @keyframes slidein2 {
+    from {
+      top: -800px;  
+    }
+  
+    to {
+      top: -0px;
+    }
+  }
