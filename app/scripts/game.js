@@ -121,17 +121,6 @@ function changeRock() {
 function draw() {
   //150 = dead
   ctx.clearRect(0, 0, cnv.width, cnv.height);   
-  ctx.drawImage(
-    playerImg,
-    player.frameE,
-    frameA,
-    80,
-    80,
-    player.posX,
-    player.posY,
-    80,
-    80
-  );
   ctx.drawImage(bananaSprite, banana.posX, banana.posY);
   if (passou15segundos) {
     ctx.drawImage(rockSprite, rock2.posX, rock2.posY);
@@ -155,6 +144,17 @@ function draw() {
   }
 
   banana.colide(index, player.posY, 80, num);
+  ctx.drawImage(
+    playerImg,
+    player.frameE,
+    frameA,
+    80,
+    80,
+    player.posX,
+    player.posY,
+    80,
+    80
+  );
   colidirComPedra = rock1.colide(index, player.posY, 80, banana.pontos);
   if (colidirComPedra || colidirComOutraPedra || colidirComOutraPedra2) {
     banana.pontos -= 5;
