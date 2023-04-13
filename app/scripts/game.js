@@ -6,10 +6,10 @@ const adventurerSuit = document.getElementById("adventureSuit");
 const junglerSuit = document.getElementById("junglerSuit");
 
 adventurerSuit.addEventListener("click", function () {
-  playerImg.src = "src/entities/adventureRunner.gif";
+  playerImg.src = "/jungleRunner/src/entities/adventureRunner.gif";
 });
 junglerSuit.addEventListener("click", function () {
-  playerImg.src = "src/entities/runnerClassic.png";
+  playerImg.src = "/jungleRunner/src/entities/runnerClassic.png";
 });
 
 const cnv = document.getElementById("mycanvas");
@@ -32,10 +32,10 @@ var scoreGlobal = document.getElementById("scoreGlobal");
 var scoreAtual = document.getElementById("scoreAtual");
 var maxScoreAtual = document.getElementById("maxScoreAtual");
 // var maxScoreGlobal = document.getElementById('maxScoreGlobal');
-bananaSprite.src = "src/obstacles/bananaImg.png";
-rockSprite.src = "src/obstacles/rock.png";
+bananaSprite.src = "/jungleRunner/src/obstacles/bananaImg.png";
+rockSprite.src = "/jungleRunner/src/obstacles/rock.png";
 
-playerImg.src = "src/entities/runnerClassic.png";
+playerImg.src = "/jungleRunner/src/entities/runnerClassic.png";
 playerImg.style.transition = "3s all";
 
 /* TESTE PROVISORIO */
