@@ -67,8 +67,7 @@ export class Player {
   setCharacter(option) {
     if (option === 0) {
       this.image.src = "src/entities/adventureRunner.png";
-    } if (option === 1) {
-      console.log(option);
+    } else if (option === 1) {
       this.image.src = "src/entities/classicRunner.png";
     }
   }

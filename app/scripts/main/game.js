@@ -40,7 +40,7 @@ window.addEventListener("load", function () {
         this.playButton(this.characterChosen);
       });
 
-      this.junglerSuit.addEventListener("click", function () {
+      this.junglerSuit.addEventListener("click", () => {
         this.player.setCharacter(1);
         this.characterChosen = true;
         this.playButton(this.characterChosen);
@@ -76,12 +76,11 @@ window.addEventListener("load", function () {
     draw(context) {
       // buscar outra solução para o passoutantossegundos
       //150 = dead
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(
-        this.banana.bananaSprite,
-        this.banana.posX,
-        this.banana.posY
-      );
+      // context.drawImage(
+      //   this.banana.bananaSprite,
+      //   this.banana.posX,
+      //   this.banana.posY
+      // );
       this.player.draw(context);
       // if (passou15segundos) {
       //   ctx.drawImage(rockSprite, rock2.posX, rock2.posY);
