@@ -1,7 +1,8 @@
-import { Player } from "../main/player.js";
+import { Player } from "../player/player.js";
 import { Banana } from "../food/banana.js";
 import { Rock } from "../obstacles/rock.js";
 import { Score } from "../gui/score.js";
+import { InputHandler } from "./inputHandler.js";
 
 window.addEventListener("load", function () {
   const canvas = document.getElementById("mycanvas");
@@ -9,9 +10,9 @@ window.addEventListener("load", function () {
 
   class Game {
     constructor() {
-      this.arrayPosition = [15, 150, 295];
       this.characterChosen = false;
-      this.index = 1;
+      this.jungleTitle = document.getElementById("jungle");
+      this.runnerTitle = document.getElementById("runner");
       this.colidirComPedra = null;
       this.botao = document.getElementById("botão");
       this.botaoPlay = document.getElementById("play");
@@ -28,6 +29,7 @@ window.addEventListener("load", function () {
       this.movendo = false;
       this.adventurerSuit = document.getElementById("adventureSuit");
       this.junglerSuit = document.getElementById("junglerSuit");
+      this.input = new InputHandler();
     }
 
     setChoice() {
@@ -35,44 +37,28 @@ window.addEventListener("load", function () {
       this.adventurerSuit.addEventListener("click", () => {
         this.player.setCharacter(0);
         this.characterChosen = true;
+        this.playButton(this.characterChosen);
       });
 
       this.junglerSuit.addEventListener("click", function () {
         this.player.setCharacter(1);
         this.characterChosen = true;
+        this.playButton(this.characterChosen);
       });
     }
 
-    playGame() {
-      this.setChoice();
-      this.botaoPlay.addEventListener("click", () => {
-        if (this.characterChosen) {
-          window.scrollTo(0, 0);
-          this.imagens.forEach(function (img) {
-            img.style.display = "block";
-          });
-          this.botao.style.display = "none";
-          this.botaoPlay.style.top = "-100000px";
-          this.energy.style.display = "block";
-          this.energyLess.style.display = "block";
-          document.body.style.overflow = "hidden";
-          this.junglerSuit.style.display = "none";
-          this.adventurerSuit.style.display = "none";
-          document.getElementById("play").style.display = "none";
-          document.getElementById("jungle").style.display = "none";
-          document.getElementById("runner").style.display = "none";
-          this.loop();
-          this.player.playerAnim();
-          this.score.setScore();
-          this.touch();
-        }
-      });
+    playButton(isChosen){
+      if(isChosen){
+        this.botaoPlay.addEventListener("click", () => {
+          this.displayManagement();
+        });
+      }
     }
-
-    loop() {
-      window.requestAnimationFrame(this.loop.bind(this), canvas);
-      this.updatePosition();
-      this.draw();
+    getCharacterChosen(){
+      return this.characterChosen;
+    }
+    update(deltaTime) {
+      this.player.update(this.input, deltaTime);
     }
     /* TESTE PROVISORIO */
 
@@ -87,22 +73,16 @@ window.addEventListener("load", function () {
     //   }, 34000);
     // }
 
-    draw(time) {
+    draw(context) {
       // buscar outra solução para o passoutantossegundos
       //150 = dead
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(this.banana.bananaSprite, this.banana.posX, this.banana.posY);
-      ctx.drawImage(
-        this.player.playerImg,
-        this.player.frameE,
-        this.player.frameA,
-        80,
-        80,
-        this.player.posX,
-        this.player.posY,
-        80,
-        80
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(
+        this.banana.bananaSprite,
+        this.banana.posX,
+        this.banana.posY
       );
+      this.player.draw(context);
       // if (passou15segundos) {
       //   ctx.drawImage(rockSprite, rock2.posX, rock2.posY);
       //   if (banana.pontos > 0) {
@@ -117,7 +97,7 @@ window.addEventListener("load", function () {
       //   }
       //   colidirComOutraPedra2 = rock3.colide(index, player.posY, 80, banana.pontos);
       // }
-      ctx.drawImage(this.rock.rockSprite, this.rock.posX, this.rock.posY);
+      context.drawImage(this.rock.rockSprite, this.rock.posX, this.rock.posY);
 
       this.banana.run();
       if (this.banana.points > 0) {
@@ -141,80 +121,77 @@ window.addEventListener("load", function () {
     }
     // FUNÇÃO DE DESENHO
 
-    updatePosition() {
-      if (this.player.posX > this.arrayPosition[this.index]) {
-        this.player.posX -= 10;
-        if (this.player.posX > this.arrayPosition[this.index]) {
-          this.player.posX -= 10;
-          if (this.player.posX > this.arrayPosition[this.index]) {
-            this.player.posX -= 10;
-          }
-        }
-      }
-      if (this.player.posX <= this.arrayPosition[this.index]) {
-        this.player.posX += 10;
-        if (this.player.posX <= this.arrayPosition[this.index]) {
-          this.player.posX += 10;
-          if (this.player.posX <= this.arrayPosition[this.index]) {
-            this.player.posX += 10;
-          }
-        }
-      }
+    // updatePosition() {
+    //   if (this.player.posX > this.arrayPosition[this.index]) {
+    //     this.player.posX -= 10;
+    //     //console.log(this.player.posX);
+    //     if (this.player.posX > this.arrayPosition[this.index]) {
+    //       this.player.posX -= 10;
+    //       //console.log(this.player.posX);
+    //       if (this.player.posX > this.arrayPosition[this.index]) {
+    //         this.player.posX -= 10;
+    //         //console.log(this.player.posX);
+    //       }
+    //     }
+    //   }
+    //   if (this.player.posX <= this.arrayPosition[this.index]) {
+    //     this.player.posX += 10;
+    //     console.log(this.player.posX);
+    //     if (this.player.posX <= this.arrayPosition[this.index]) {
+    //       this.player.posX += 10;
+    //       console.log(this.player.posX);
+    //       if (this.player.posX <= this.arrayPosition[this.index]) {
+    //         this.player.posX += 10;
+    //         console.log(this.player.posX);
+    //       }
+    //     }
+    //   }
 
-      // if (this.banana.pontos < 80) {
-      //   setTimeout(() => {
-      //     if (this.banana.pontos > 0) {
-      //       crocoBoss.style.visibility = "visible";
-      //       crocoBoss.style.top = "550px";
-      //       if (index == 1) {
-      //         crocoBoss.style.left = "100px";
-      //       } else if (index == 0) {
-      //         crocoBoss.style.left = "-40px";
-      //       } else if (index == 2) {
-      //         crocoBoss.style.left = "240px";
-      //       }
-      //     } else {
-      //       crocoBoss.style.transition = "10s all linear";
-      //       crocoBoss.style.top = "-2000px";
-      //       setTimeout(() => {
-      //         morto = true;
-      //         player.frameE = 260;
-      //       }, 800);
-      //       setTimeout(() => {
-      //         document.getElementById("gameOver").style.opacity = 1;
-      //       }, 1400);
-      //     }
-      //   }, 1000);
-      // } else {
-      //   crocoBoss.style.top = "1000px";
-      //   crocoBoss.style.visibility = "hidden";
-      // }
-    }
+    //   // if (this.banana.pontos < 80) {
+    //   //   setTimeout(() => {
+    //   //     if (this.banana.pontos > 0) {
+    //   //       crocoBoss.style.visibility = "visible";
+    //   //       crocoBoss.style.top = "550px";
+    //   //       if (index == 1) {
+    //   //         crocoBoss.style.left = "100px";
+    //   //       } else if (index == 0) {
+    //   //         crocoBoss.style.left = "-40px";
+    //   //       } else if (index == 2) {
+    //   //         crocoBoss.style.left = "240px";
+    //   //       }
+    //   //     } else {
+    //   //       crocoBoss.style.transition = "10s all linear";
+    //   //       crocoBoss.style.top = "-2000px";
+    //   //       setTimeout(() => {
+    //   //         morto = true;
+    //   //         player.frameE = 260;
+    //   //       }, 800);
+    //   //       setTimeout(() => {
+    //   //         document.getElementById("gameOver").style.opacity = 1;
+    //   //       }, 1400);
+    //   //     }
+    //   //   }, 1000);
+    //   // } else {
+    //   //   crocoBoss.style.top = "1000px";
+    //   //   crocoBoss.style.visibility = "hidden";
+    //   // }
+    // }
     // FUNÇÃO QUE ATUALIZA A POSIÇÃO DO BROTHER
-
-    
-    keyHandler() {
-      window.addEventListener("keydown", (e) => {
-        if (this.banana.pontos >= 0)
-          switch (e.keyCode) {
-            case 37:
-              if (this.index == 0) {
-                this.index = 0;
-              } else {
-                this.index--;
-              }
-              break;
-            case 39:
-              if (this.index == 2) {
-                this.index = 2;
-              } else {
-                this.index++;
-              }
-              break;
-          }
+    displayManagement(){
+      this.imagens.forEach(function (img) {
+        img.style.display = "block";
       });
+      this.botao.style.display = "none";
+      this.botaoPlay.style.top = "-100000px";
+      this.energy.style.display = "block";
+      this.energyLess.style.display = "block";
+        document.body.style.overflow = "hidden";
+        this.junglerSuit.style.display = "none";
+        this.adventurerSuit.style.display = "none";
+        this.botaoPlay.style.display = "none";
+        this.jungleTitle.style.display = "none";
+        this.runnerTitle.style.display = "none";
     }
-
     touch() {
       document.body.addEventListener("touchstart", (event) => {
         startX = event.touches[0].pageX;
@@ -249,5 +226,23 @@ window.addEventListener("load", function () {
   }
 
   const game = new Game();
-  game.playGame();
+  let lastTime = 0; 
+
+  function gameLoop(pastTime) {
+    // pastTime = uma marca de tempo de alta precisão, representando o tempo em milissegundos desde que a página foi carregada. Utilizado para calcular o deltatime.
+    const deltaTime = pastTime - lastTime;
+    lastTime = pastTime;
+    game.setChoice();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (game.getCharacterChosen()) {
+        window.scrollTo(0, 0);
+        game.update(deltaTime);
+        game.draw();
+        game.player.playerAnim();
+        game.score.setScore();
+        game.touch();
+      }
+      requestAnimationFrame(gameLoop);
+  }
+  gameLoop(0);
 });
