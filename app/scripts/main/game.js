@@ -58,7 +58,7 @@ window.addEventListener("load", function () {
       return this.characterChosen;
     }
     update(deltaTime) {
-      this.player.update(this.input, deltaTime);
+      this.player.update(this.input.keys, deltaTime);
     }
     /* TESTE PROVISORIO */
 
