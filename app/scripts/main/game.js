@@ -1,16 +1,17 @@
 import { Player } from "../player/player.js";
-import { Banana } from "../food/banana.js";
-import { Rock } from "../obstacles/rock.js";
+import { Banana } from "../main/scene.js";
+import { Rock } from "../main/scene.js";
 import { Score } from "../gui/score.js";
-import { InputHandler } from "./inputHandler.js";
+import { KeyboardInputHandler } from "./inputHandler.js";
 
 window.addEventListener("load", function () {
   const canvas = document.getElementById("mycanvas");
-  const ctx = canvas.getContext("2d");
+  const context = canvas.getContext("2d");
 
   class Game {
     constructor() {
       this.characterChosen = false;
+      this.canStart = false;
       this.jungleTitle = document.getElementById("jungle");
       this.runnerTitle = document.getElementById("runner");
       this.colidirComPedra = null;
@@ -18,8 +19,8 @@ window.addEventListener("load", function () {
       this.botaoPlay = document.getElementById("play");
       this.imagens = Array.from(document.getElementsByTagName("img"));
       this.score = new Score();
-      this.player = new Player();
       this.crocoBoss = document.getElementById("crocoBoss");
+      this.player = new Player(this);
       this.banana = new Banana();
       this.rock = new Rock();
       this.morto = false;
@@ -29,7 +30,8 @@ window.addEventListener("load", function () {
       this.movendo = false;
       this.adventurerSuit = document.getElementById("adventureSuit");
       this.junglerSuit = document.getElementById("junglerSuit");
-      this.input = new InputHandler();
+      this.input = new KeyboardInputHandler();
+      this.fps = 60;
     }
 
     setChoice() {
@@ -50,12 +52,13 @@ window.addEventListener("load", function () {
     playButton(isChosen){
       if(isChosen){
         this.botaoPlay.addEventListener("click", () => {
+          this.canStart = true;
           this.displayManagement();
         });
       }
     }
-    getCharacterChosen(){
-      return this.characterChosen;
+    startGame(){
+      return this.canStart;
     }
     update(deltaTime) {
       this.player.update(this.input.keys, deltaTime);
@@ -73,7 +76,7 @@ window.addEventListener("load", function () {
     //   }, 34000);
     // }
 
-    draw(context) {
+    draw(deltaTime, context) {
       // buscar outra solução para o passoutantossegundos
       //150 = dead
       // context.drawImage(
@@ -81,16 +84,16 @@ window.addEventListener("load", function () {
       //   this.banana.posX,
       //   this.banana.posY
       // );
-      this.player.draw(context);
+      this.player.draw(deltaTime, context);
       // if (passou15segundos) {
-      //   ctx.drawImage(rockSprite, rock2.posX, rock2.posY);
+      //   context.drawImage(rockSprite, rock2.posX, rock2.posY);
       //   if (banana.pontos > 0) {
       //     rock2.run();
       //   }
       //   colidirComOutraPedra = rock2.colide(index, player.posY, 80, banana.pontos);
       // }
       // if (passoumais15segundos) {
-      //   ctx.drawImage(rockSprite, rock3.posX, rock3.posY);
+      //   context.drawImage(rockSprite, rock3.posX, rock3.posY);
       //   if (banana.pontos > 0) {
       //     rock3.run();
       //   }
@@ -191,55 +194,21 @@ window.addEventListener("load", function () {
         this.jungleTitle.style.display = "none";
         this.runnerTitle.style.display = "none";
     }
-    touch() {
-      document.body.addEventListener("touchstart", (event) => {
-        startX = event.touches[0].pageX;
-      });
-      document.body.addEventListener("touchmove", (event) => {
-        if (banana.pontos >= 0) {
-          if (movendo == false) {
-            var currentX = event.touches[0].pageX;
-            var diferenceX = startX - currentX;
-            if (diferenceX > 50) {
-              if (index == 0) {
-                index = 0;
-              } else {
-                index -= 1;
-                movendo = true;
-              }
-            } else if (diferenceX < -50) {
-              if (index == 2) {
-                index = 2;
-              } else {
-                index += 1;
-                movendo = true;
-              }
-            }
-          }
-        }
-      });
-      document.body.addEventListener("touchend", () => {
-        movendo = false;
-      });
-    }
   }
 
   const game = new Game();
-  let lastTime = 0; 
+  let lastTime = Date.now(); 
 
-  function gameLoop(pastTime) {
-    // pastTime = uma marca de tempo de alta precisão, representando o tempo em milissegundos desde que a página foi carregada. Utilizado para calcular o deltatime.
-    const deltaTime = pastTime - lastTime;
-    lastTime = pastTime;
+  function gameLoop(currentTime) {
+    let deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    context.clearRect(0, 0, canvas.width, canvas.height);
     game.setChoice();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (game.getCharacterChosen()) {
+      if (game.startGame() && deltaTime >= 16.67) {
         window.scrollTo(0, 0);
         game.update(deltaTime);
-        game.draw();
-        game.player.playerAnim();
-        game.score.setScore();
-        game.touch();
+        game.draw(deltaTime, context);
+        // game.score.setScore();
       }
       requestAnimationFrame(gameLoop);
   }

@@ -1,15 +1,19 @@
 import { Running } from "../player/playerStates.js";
+import { Floor } from "../main/scene.js";
+
 export class Player {
   constructor() {
-    this.posX = 160;
-    this.posY = 600;
-    this.width = 74;
-    this.height = 68;
+    this.virtualPositionX = 1;
+    this.positionX = 160;
+    this.positionY = 600;
+    this.width = 80;
+    this.height = 76;
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 0;
-    this.speed = 5;
-    this.maxSpeed = 140;
+    this.speed = 0;
+    this.maxSpeed = 5;
+    this.floor = new Floor();
     this.alive = true;
     this.score = 0;
     this.maxScore = 0;
@@ -20,21 +24,14 @@ export class Player {
     this.states = [new Running(this)];
     this.currentState = this.states[0];
     this.currentState.enter();
-    this.movendo = false; // utilizado para verificar se o player está efetuando alguma transição de movimento.
   }
 
   update(input, deltaTime) {
     // deltatime = tempo final - tempo inicial, utilizado para medir os frames por segundo ( FPS ).
     this.currentState.handleInput(input);
-    // horizontal movement
-    if (input.includes("ArrowRight"))
-      for (let i = 0; i <= maxSpeed; i++) this.speed += i;
-    else if (input.includes("ArrowLeft"))
-      for (let i = 0; i <= maxSpeed; i++) this.speed -= i;
-    else this.speed = 0;
-    if (this.posX <= 20) this.x = 20;
-    if (this.posX >= 300) this.posX = 300;
-    // sprite animation
+    // horizontal movement / movimento horizontal
+    this.movement(input);
+    // sprite animation / animação das sprites.
     if (this.frameTimer > this.frameInterval) {
       this.frameTimer = 0;
       if (this.frameX < this.maxFrame) this.frameX++;
@@ -44,21 +41,38 @@ export class Player {
     }
   }
 
-  isMoving(input) {
-    if (input.includes("ArrowLeft" || input.includes("ArrowRight"))) {
-      this.movendo = true;
+  movement(input) {
+      if(this.floor.paths.includes(this.floor.paths[this.virtualPositionX])){
+       this.positionX = this.floor.paths[this.virtualPositionX];
+       
+      console.log(this.virtualPositionX);
+    if (input.includes("ArrowRight")) {
+      this.virtualPositionX += 1;
+    } else if (input.includes("ArrowLeft")) {
+      this.virtualPositionX -= 1;
     }
   }
+    if(this.virtualPositionX <=-1) this.virtualPositionX = 0;
+    else if (this.virtualPositionX >=3) this.virtualPositionX = 2;
+    // defining movement margin / definindo a margem de movimento.
+    } 
 
-  draw(context) {
+  draw(deltaTime, context) {
+    if (this.frameTimer > this.frameInterval) {
+      if (this.frameX < this.maxFrame) this.frameX++;
+      else this.frameX = 0;
+      this.frameTimer = 0;
+    } else {
+      this.frameTimer += deltaTime;
+    }
     context.drawImage(
       this.image,
       this.frameX * this.width,
       this.frameY * this.height,
       this.width,
       this.height,
-      this.posX,
-      this.posY,
+      this.positionX,
+      this.positionY,
       this.width,
       this.height
     );
