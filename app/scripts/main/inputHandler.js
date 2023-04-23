@@ -23,12 +23,12 @@ export class MobileInputHandler {
     this.touches = [];
     window.addEventListener("touchstart", (e) => {
       if (
-        e.touches[0].clientX < window.innerWidth / 2 &&
+        (e.touches[0].clientX < window.innerWidth / 2) &&
         this.touches.indexOf("left") === -1
       ) {
         this.touches.push("left");
       } else if (
-        e.touches[0].clientX > window.innerWidth / 2 &&
+        (e.touches[0].clientX > window.innerWidth / 2) &&
         this.touches.indexOf("right") === -1
       ) {
         this.touches.push("right");

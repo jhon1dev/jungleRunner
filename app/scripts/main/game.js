@@ -20,7 +20,7 @@ window.addEventListener("load", function () {
       this.imagens = Array.from(document.getElementsByTagName("img"));
       this.score = new Score();
       this.crocoBoss = document.getElementById("crocoBoss");
-      this.player = new Player(this);
+      this.player = new Player();
       this.banana = new Banana();
       this.rock = new Rock();
       this.morto = false;
@@ -32,6 +32,7 @@ window.addEventListener("load", function () {
       this.junglerSuit = document.getElementById("junglerSuit");
       this.input = new KeyboardInputHandler();
       this.fps = 60;
+      this.fps_rate = 0;
     }
 
     setChoice() {
@@ -49,137 +50,28 @@ window.addEventListener("load", function () {
       });
     }
 
-    playButton(isChosen){
-      if(isChosen){
+    playButton(isChosen) {
+      if (isChosen) {
         this.botaoPlay.addEventListener("click", () => {
           this.canStart = true;
           this.displayManagement();
         });
       }
     }
-    startGame(){
+    startGame() {
       return this.canStart;
     }
     update(deltaTime) {
       this.player.update(this.input.keys, deltaTime);
     }
-    /* TESTE PROVISORIO */
-
-    // VARIÁVEIS
-
-    // changeRock() {
-    //   setTimeout(() => {
-    //     passou15segundos = true;
-    //   }, 15000);
-    //   setTimeout(() => {
-    //     passoumais15segundos = true;
-    //   }, 34000);
-    // }
 
     draw(deltaTime, context) {
-      // buscar outra solução para o passoutantossegundos
-      //150 = dead
-      // context.drawImage(
-      //   this.banana.bananaSprite,
-      //   this.banana.posX,
-      //   this.banana.posY
-      // );
-      this.player.draw(deltaTime, context);
-      // if (passou15segundos) {
-      //   context.drawImage(rockSprite, rock2.posX, rock2.posY);
-      //   if (banana.pontos > 0) {
-      //     rock2.run();
-      //   }
-      //   colidirComOutraPedra = rock2.colide(index, player.posY, 80, banana.pontos);
-      // }
-      // if (passoumais15segundos) {
-      //   context.drawImage(rockSprite, rock3.posX, rock3.posY);
-      //   if (banana.pontos > 0) {
-      //     rock3.run();
-      //   }
-      //   colidirComOutraPedra2 = rock3.colide(index, player.posY, 80, banana.pontos);
-      // }
+      this.player.draw(1000 / deltaTime, context);
+
       context.drawImage(this.rock.rockSprite, this.rock.posX, this.rock.posY);
-
-      this.banana.run();
-      if (this.banana.points > 0) {
-        this.rock.run();
-      }
-
-      this.banana.colide(this.index, this.player.posY, 80, this.banana.points);
-
-      this.colidirComPedra = this.rock.colide(
-        this.index,
-        this.player.posY,
-        80,
-        this.banana.points
-      );
-      // if (colidirComPedra || colidirComOutraPedra || colidirComOutraPedra2) {
-      //   banana.pontos -= 5;
-      //   energy.style.backgroundColor = "rgb(190, 31, 31)";
-      // } else {
-      //   energy.style.backgroundColor = "#ffbd00";
-      // }
     }
-    // FUNÇÃO DE DESENHO
 
-    // updatePosition() {
-    //   if (this.player.posX > this.arrayPosition[this.index]) {
-    //     this.player.posX -= 10;
-    //     //console.log(this.player.posX);
-    //     if (this.player.posX > this.arrayPosition[this.index]) {
-    //       this.player.posX -= 10;
-    //       //console.log(this.player.posX);
-    //       if (this.player.posX > this.arrayPosition[this.index]) {
-    //         this.player.posX -= 10;
-    //         //console.log(this.player.posX);
-    //       }
-    //     }
-    //   }
-    //   if (this.player.posX <= this.arrayPosition[this.index]) {
-    //     this.player.posX += 10;
-    //     console.log(this.player.posX);
-    //     if (this.player.posX <= this.arrayPosition[this.index]) {
-    //       this.player.posX += 10;
-    //       console.log(this.player.posX);
-    //       if (this.player.posX <= this.arrayPosition[this.index]) {
-    //         this.player.posX += 10;
-    //         console.log(this.player.posX);
-    //       }
-    //     }
-    //   }
-
-    //   // if (this.banana.pontos < 80) {
-    //   //   setTimeout(() => {
-    //   //     if (this.banana.pontos > 0) {
-    //   //       crocoBoss.style.visibility = "visible";
-    //   //       crocoBoss.style.top = "550px";
-    //   //       if (index == 1) {
-    //   //         crocoBoss.style.left = "100px";
-    //   //       } else if (index == 0) {
-    //   //         crocoBoss.style.left = "-40px";
-    //   //       } else if (index == 2) {
-    //   //         crocoBoss.style.left = "240px";
-    //   //       }
-    //   //     } else {
-    //   //       crocoBoss.style.transition = "10s all linear";
-    //   //       crocoBoss.style.top = "-2000px";
-    //   //       setTimeout(() => {
-    //   //         morto = true;
-    //   //         player.frameE = 260;
-    //   //       }, 800);
-    //   //       setTimeout(() => {
-    //   //         document.getElementById("gameOver").style.opacity = 1;
-    //   //       }, 1400);
-    //   //     }
-    //   //   }, 1000);
-    //   // } else {
-    //   //   crocoBoss.style.top = "1000px";
-    //   //   crocoBoss.style.visibility = "hidden";
-    //   // }
-    // }
-    // FUNÇÃO QUE ATUALIZA A POSIÇÃO DO BROTHER
-    displayManagement(){
+    displayManagement() {
       this.imagens.forEach(function (img) {
         img.style.display = "block";
       });
@@ -187,30 +79,35 @@ window.addEventListener("load", function () {
       this.botaoPlay.style.top = "-100000px";
       this.energy.style.display = "block";
       this.energyLess.style.display = "block";
-        document.body.style.overflow = "hidden";
-        this.junglerSuit.style.display = "none";
-        this.adventurerSuit.style.display = "none";
-        this.botaoPlay.style.display = "none";
-        this.jungleTitle.style.display = "none";
-        this.runnerTitle.style.display = "none";
+      document.body.style.overflow = "hidden";
+      this.junglerSuit.style.display = "none";
+      this.adventurerSuit.style.display = "none";
+      this.botaoPlay.style.display = "none";
+      this.jungleTitle.style.display = "none";
+      this.runnerTitle.style.display = "none";
     }
   }
 
   const game = new Game();
-  let lastTime = Date.now(); 
+  let cycleCount = 0;
 
   function gameLoop(currentTime) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    cycleCount++;
+    if (cycleCount >= 60) cycleCount = 0;
+    let lastTime = 0;
+    currentTime = Date.now();
     let deltaTime = currentTime - lastTime;
     lastTime = currentTime;
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    if (cycleCount % 60 == 0) game.fps_rate = Math.floor(1000 / deltaTime);
     game.setChoice();
-      if (game.startGame() && deltaTime >= 16.67) {
-        window.scrollTo(0, 0);
-        game.update(deltaTime);
-        game.draw(deltaTime, context);
-        // game.score.setScore();
-      }
-      requestAnimationFrame(gameLoop);
+    if (game.startGame() && Math.floor(deltaTime > 1000 / game.fps)) {
+      window.scrollTo(0, 0);
+      game.update(deltaTime);
+      game.draw(deltaTime, context);
+      // game.score.setScore();
+    }
+    requestAnimationFrame(gameLoop);
   }
-  gameLoop(0);
+  gameLoop(10);
 });
