@@ -8,24 +8,46 @@ export class Rock {
   constructor() {
     this.array = [38, 176, 318];
     this.index = Math.floor(Math.random() * (3 - 0) + 0);
-    this.posX = this.array[this.index];
-    this.posY = 0;
-    this.pontos = 150;
+    this.positionX = this.array[this.index];
+    this.positionY = 0;
+    this.points = 150;
     this.velocity = 9;
     this.correndo = false;
-    this.posY = 0;
-    this.rockSprite = new Image();
+    this.positionY = 0;
+    this.image = new Image();
+  }
+
+  draw(context) {
+    context.drawImage(
+      this.image,
+      this.positionX,
+      this.positionY,
+      this.width,
+      this.height,
+    );
+  }
+
+  update(context, deltaTime) {
+    this.draw(context);
+  
+    if (this.frameTimer > this.frameInterval) {
+      this.frameTimer = 0;
+      if (this.frameX < this.maxFrame) this.frameX++;
+      else this.frameX = 0;
+    } else {
+      this.frameTimer += deltaTime;
+    }
   }
 
   run() {
     this.correndo = true;
-    if (this.pontos > 0) {
-      if (this.posY < 1000) {
-        this.posY += this.velocity;
+    if (this.points > 0) {
+      if (this.positionY < 1000) {
+        this.positionY += this.velocity;
       } else {
-        this.posY = -100;
+        this.positionY = -100;
         this.index = Math.floor(Math.random() * (3 - 0) + 0);
-        this.posX = this.array[this.index];
+        this.positionX = this.array[this.index];
       }
     }
     if (this.correndo) {
@@ -35,11 +57,11 @@ export class Rock {
     }
   }
 
-  colide(posiçãoX, posiçãoY, points) {
+  colide(positionX, positionY, points) {
     if (
-      posiçãoX == this.index &&
-      posiçãoY > this.posY &&
-      posiçãoY < this.posY + 40
+      positionX == this.index &&
+      positionY > this.positionY &&
+      positionY < this.positionY + 40
     ) {
       if (points > 0) {
         return true;
@@ -56,8 +78,8 @@ export class Banana {
   constructor() {
     this.array = [45, 183, 325];
     this.index = Math.floor(Math.random() * (3 - 0) + 0);
-    this.posX = this.array[this.index];
-    this.posY = -100;
+    this.positionX = this.array[this.index];
+    this.positionY = -100;
     this.points = 150;
     this.velocity = 10;
     this.bananaSprite = new Image();
@@ -65,36 +87,36 @@ export class Banana {
   }
 
   run() {
-    if (this.pontos > 0) {
-      this.pontos -= 0.1;
-      if (this.posY < 1000) {
-        this.posY += this.velocity;
+    if (this.points > 0) {
+      this.points -= 0.1;
+      if (this.positionY < 1000) {
+        this.positionY += this.velocity;
         this.velocity += 0.001;
       } else {
-        this.posY = -100;
+        this.positionY = -100;
         this.index = Math.floor(Math.random() * (3 - 0) + 0);
-        this.posX = this.array[this.index];
+        this.positionX = this.array[this.index];
       }
     }
   }
 
-  colide(posiçãoX, posiçãoY, tamanho, points) {
+  colide(positionX, positionY, tamanho, points) {
     if (
-      posiçãoX == this.index &&
-      posiçãoY > this.posY &&
-      posiçãoY < this.posY + 40
+      positionX == this.index &&
+      positionY > this.positionY &&
+      positionY < this.positionY + 40
     ) {
-      if (this.pontos > 0) {
-        this.pontos += 15;
-        this.posY = -100000;
+      if (this.points > 0) {
+        this.points += 15;
+        this.positionY = -100000;
         setTimeout(() => {
-          this.posY = -100;
+          this.positionY = -100;
           this.index = Math.floor(Math.random() * (3 - 0) + 0);
-          this.posX = this.array[this.index];
+          this.positionX = this.array[this.index];
         }, 500);
       }
-      if (this.pontos >= 150) {
-        this.pontos = 150;
+      if (this.points >= 150) {
+        this.points = 150;
       }
     } else {
     }

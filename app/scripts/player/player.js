@@ -8,10 +8,6 @@ export class Player {
     this.virtualPositionX = 1;
     this.positionX = 160;
     this.positionY = 600;
-    this.image = new Image();
-    this.states = [new Running(this)];
-    this.currentState = this.states[0];
-    this.currentState.enter();
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 0;
@@ -21,9 +17,13 @@ export class Player {
     this.canMove = true;
     this.score = 0;
     this.maxScore = 0;
-    this.fps = 60;
+    this.fps = 1;
     this.frameInterval = 1000 / this.fps;
     this.frameTimer = 0;
+    this.image = new Image();
+    this.states = [new Running(this)];
+    this.currentState = this.states[0];
+    this.currentState.enter();
     this.floor = new Floor();
   }
 
