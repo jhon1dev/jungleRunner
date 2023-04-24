@@ -19,13 +19,13 @@ export class Running extends State {
     enter(){
         this.player.frameX = 0;
         this.player.frameY = 0;
-        this.player.maxFrame = 5;
+        this.player.maxFrame = 4;
     }
     handleInput(input){
-        if(input.includes('ArrowDown')){
+        if(input.keys.includes('ArrowDown')){
             this.player.setState(states.RUNNING, 0);
         }
-        else if(input.includes('ArrowUp')){
+        else if(input.keys.includes('ArrowUp')){
             this.player.setState(states.RUNNING, 1);
         }
     }

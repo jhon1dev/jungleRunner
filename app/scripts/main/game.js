@@ -62,12 +62,12 @@ window.addEventListener("load", function () {
       return this.canStart;
     }
     update(deltaTime) {
-      this.player.update(this.input.keys, deltaTime);
+      this.player.update(this.input, deltaTime);
       // this.rock.update(deltaTime);
     }
 
     draw(deltaTime, context) {
-      this.player.draw(1000 / deltaTime, context);
+      this.player.draw(deltaTime, context);
     }
 
     displayManagement() {
@@ -88,19 +88,15 @@ window.addEventListener("load", function () {
   }
 
   const game = new Game();
-  let cycleCount = 0;
+  
+  let lastTime = 0;
 
   function gameLoop(currentTime) {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    cycleCount++;
-    if (cycleCount >= 60) cycleCount = 0;
-    let lastTime = 0;
-    currentTime = Date.now();
-    let deltaTime = currentTime - lastTime;
+    const deltaTime = currentTime - lastTime;
     lastTime = currentTime;
-    if (cycleCount % 60 == 0) game.fps_rate = Math.floor(1000 / deltaTime);
+    context.clearRect(0, 0, canvas.width, canvas.height);
     game.setChoice();
-    if (game.startGame() && Math.floor(deltaTime > 1000 / game.fps)) {
+    if (game.startGame() && Math.floor(1000/deltaTime)) {
       window.scrollTo(0, 0);
       game.update(deltaTime);
       game.draw(deltaTime, context);
@@ -108,5 +104,5 @@ window.addEventListener("load", function () {
     }
     requestAnimationFrame(gameLoop);
   }
-  gameLoop(10);
+  gameLoop(0);
 });

@@ -17,7 +17,9 @@ export class Player {
     this.canMove = true;
     this.score = 0;
     this.maxScore = 0;
-    this.fps = 1;
+    this.speed = 0;
+    this.maxSpeed = 5;
+    this.fps = 25;
     this.frameInterval = 1000 / this.fps;
     this.frameTimer = 0;
     this.image = new Image();
@@ -32,44 +34,48 @@ export class Player {
     this.currentState.handleInput(input);
     // horizontal movement / movimento horizontal
     this.movement(input, deltaTime);
-    console.log(this.frameTimer, this.frameInterval);
+  }
+
+  movement(input, deltaTime) {
+    if (this.frameTimer < this.frameInterval) {
+      if (this.floor.paths.includes(this.floor.paths[this.virtualPositionX])) {
+        
+        this.speed = 10
+        
+        this.finalPosition = this.floor.paths[this.virtualPositionX];
+        if (this.positionX > this.finalPosition) {
+          this.positionX -= this.speed;
+        } else if (this.positionX < this.finalPosition) {
+          this.positionX += this.speed;
+        } else {
+          this.speed = 0;
+          console.log(this.speed);
+        }
+        if (input.keys.includes("ArrowRight") && input.timeOut == 0) {
+          this.virtualPositionX += 1;
+          input.timeOut = 1;
+          console.log();
+        } else if (input.keys.includes("ArrowLeft") && input.timeOut == 0) {
+          this.virtualPositionX -= 1;
+          input.timeOut = 1;
+        }
+      }    
+    } 
     // sprite animation / animação das sprites.
     if (this.frameTimer > this.frameInterval) {
       this.frameTimer = 0;
       if (this.frameX < this.maxFrame) this.frameX++;
       else this.frameX = 0;
-    } else {
+    } 
+    else {
       this.frameTimer += deltaTime;
-    }
-  }
-
-  movement(input, deltaTime) {
-    if (this.frameTimer < this.frameInterval) {
-      if (this.floor.paths.includes(this.floor.paths[this.virtualPositionX]) && this.canMove) {
-        this.positionX = this.floor.paths[this.virtualPositionX];
-        this.canMove = false;
-        if (input.includes("ArrowRight")) {
-          this.virtualPositionX += 1;
-        } else if (input.includes("ArrowLeft")) {
-          this.virtualPositionX -= 1;
-        }
-      }
-    } else {
-      this.frameTimer += deltaTime;
-      this.canMove = true; // resetando a variável para permitir novo movimento
     }
     if (this.virtualPositionX <= -1) this.virtualPositionX = 0;
     else if (this.virtualPositionX >= 3) this.virtualPositionX = 2;
   }
 
   draw(deltaTime, context) {
-    if (this.frameTimer < this.frameInterval) {
-      if (this.frameX < this.maxFrame) this.frameX++;
-      else this.frameX = 0;
-      this.frameTimer = 0;
-    } else {
-      this.frameTimer += deltaTime;
-    }
+
     context.drawImage(
       this.image,
       this.frameX * this.width,
