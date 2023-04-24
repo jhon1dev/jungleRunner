@@ -19,7 +19,7 @@ export class Running extends State {
     enter(){
         this.player.frameX = 0;
         this.player.frameY = 0;
-        this.player.maxFrame = 4;
+        this.player.maxFrame = 5;
     }
     handleInput(input){
         if(input.includes('ArrowDown')){

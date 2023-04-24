@@ -63,12 +63,11 @@ window.addEventListener("load", function () {
     }
     update(deltaTime) {
       this.player.update(this.input.keys, deltaTime);
-      this.rock.update(deltaTime);
+      // this.rock.update(deltaTime);
     }
 
     draw(deltaTime, context) {
       this.player.draw(1000 / deltaTime, context);
-      this.rock.draw(context);
     }
 
     displayManagement() {
